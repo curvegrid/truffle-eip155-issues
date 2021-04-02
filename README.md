@@ -6,9 +6,9 @@ Reproduction for Truffle EIP-155 issues
 - geth v1.10.1
 
 ## Steps to reproduce
-1. Startup a local geth dev node with HTTP RPC enabled.
+1. Startup a local geth dev node with HTTP RPC enabled, **and the network ID different from the chain ID**.
 ```
-$ geth --dev --http console
+$ geth --dev --http --networkid 1338 console
 INFO [03-31|00:33:18.012] Starting Geth in ephemeral dev mode...
 INFO [03-31|00:33:18.013] Maximum peer count                       ETH=50 LES=0 total=50
 INFO [03-31|00:33:18.014] Set global gas cap                       cap=25000000
@@ -17,6 +17,7 @@ INFO [03-31|00:33:19.941] Allocated trie memory caches             clean=154.00M
 INFO [03-31|00:33:19.941] Writing custom genesis block
 INFO [03-31|00:33:19.942] Persisted trie from memory database      nodes=12 size=1.82KiB time="73.867µs" gcnodes=0 gcsize=0.00B gctime=0s livenodes=1 livesize=0.00B
 INFO [03-31|00:33:19.942] Initialised chain configuration          config="{ChainID: 1337 Homestead: 0 DAO: <nil> DAOSupport: false EIP150: 0 EIP155: 0 EIP158: 0 Byzantium: 0 Constantinople: 0 Petersburg: 0 Istanbul: 0, Muir Glacier: 0, Berlin: 0, YOLO v3: <nil>, Engine: clique}"
+INFO [03-31|00:33:19.942] Initialising Ethereum protocol           network=1338 dbversion=<nil>
 <snip>
 INFO [03-31|00:33:20.085] Sealing paused, waiting for transactions
 Welcome to the Geth JavaScript console!
@@ -74,16 +75,25 @@ Starting migrations...
 
 Error:  *** Deployment Failed ***
 
-"Migrations" -- only replay-protected (EIP-155) transactions allowed over RPC.
+"Migrations" -- invalid sender.
 
-    at /Users/jeff/.nvm/versions/node/v10.16.0/lib/node_modules/truffle/build/webpack:/packages/deployer/src/deployment.js:364:1
-    at process._tickCallback (internal/process/next_tick.js:68:7)
-Truffle v5.1.17 (core: 5.1.17)
-Node v10.16.0
+    at /usr/local/lib/node_modules/truffle/build/webpack:/packages/deployer/src/deployment.js:365:1
+    at processTicksAndRejections (node:internal/process/task_queues:94:5)
+    at Migration._deploy (/usr/local/lib/node_modules/truffle/build/webpack:/packages/migrate/Migration.js:74:1)
+    at Migration._load (/usr/local/lib/node_modules/truffle/build/webpack:/packages/migrate/Migration.js:61:1)
+    at Migration.run (/usr/local/lib/node_modules/truffle/build/webpack:/packages/migrate/Migration.js:212:1)
+    at Object.runMigrations (/usr/local/lib/node_modules/truffle/build/webpack:/packages/migrate/index.js:150:1)
+    at Object.runFrom (/usr/local/lib/node_modules/truffle/build/webpack:/packages/migrate/index.js:110:1)
+    at Object.run (/usr/local/lib/node_modules/truffle/build/webpack:/packages/migrate/index.js:87:1)
+    at runMigrations (/usr/local/lib/node_modules/truffle/build/webpack:/packages/core/lib/commands/migrate.js:263:1)
+    at Object.run (/usr/local/lib/node_modules/truffle/build/webpack:/packages/core/lib/commands/migrate.js:228:1)
+    at Command.run (/usr/local/lib/node_modules/truffle/build/webpack:/packages/core/lib/command.js:140:1)
+Truffle v5.3.0 (core: 5.3.0)
+Node v15.11.0
 $
 ```
 
 In the geth console:
 ```
-> WARN [03-31|00:38:17.735] Served eth_sendRawTransaction            conn=127.0.0.1:58272 reqid=5234206283730175 t="294.504µs" err="only replay-protected (EIP-155) transactions allowed over RPC"
+WARN [04-03|03:04:02.906] Served eth_sendRawTransaction            conn=127.0.0.1:55049 reqid=1980185469547951 t="98.893µs"  err="invalid sender"
 ```
