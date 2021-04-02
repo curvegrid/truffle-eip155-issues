@@ -2,7 +2,7 @@
 Reproduction for Truffle EIP-155 issues
 
 ## Pre-requisites
-- Truffle v5.2.5
+- Truffle v5.3.0
 - geth v1.10.1
 
 ## Steps to reproduce
