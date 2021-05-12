@@ -1,6 +1,9 @@
 # truffle-eip155-issues
 Reproduction for Truffle EIP-155 issues
 
+## Fixed!
+In `hdwallet-provider` v1.4.0, which the `main` branch has been updated to.
+
 ## Pre-requisites
 - Truffle v5.3.0
 - geth v1.10.1
